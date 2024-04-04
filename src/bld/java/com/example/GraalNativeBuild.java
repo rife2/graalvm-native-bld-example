@@ -41,6 +41,8 @@ public class GraalNativeBuild extends Project {
         new ExecOperation()
                 .fromProject(this)
                 .timeout(120)
+                // The native image options documentation can be found at:
+                // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
                 .command("native-image", // use its absolute path if not found
                         "-jar",
                         Paths.get(buildDistDirectory().getAbsolutePath(), jarFileName()).toString(),
