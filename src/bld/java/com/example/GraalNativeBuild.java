@@ -12,6 +12,13 @@ import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
 import static rife.bld.dependencies.Repository.RIFE2_RELEASES;
 import static rife.bld.dependencies.Scope.test;
 
+/**
+ * Gradle Native Example Build.
+ *
+ * <ul style="list-style-type:none">
+ *     <li>{@code ./bld compile jar native-exec}</li>
+ * </ul>
+ */
 public class GraalNativeBuild extends Project {
     public GraalNativeBuild() {
         pkg = "com.example";
@@ -29,6 +36,7 @@ public class GraalNativeBuild extends Project {
                 .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 10, 2)))
                 .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 10, 2)));
 
+        // Add the main class to the manifest
         jarOperation().manifestAttribute(Attributes.Name.MAIN_CLASS, mainClass());
     }
 
@@ -36,7 +44,7 @@ public class GraalNativeBuild extends Project {
         new GraalNativeBuild().start(args);
     }
 
-    @BuildCommand(value = "native-exec", summary = "Build a native executable")
+    @BuildCommand(value = "native-exec", summary = "Builds a native executable")
     public void nativeExec() throws Exception {
         new ExecOperation()
                 .fromProject(this)
@@ -48,6 +56,5 @@ public class GraalNativeBuild extends Project {
                         Paths.get(buildDistDirectory().getAbsolutePath(), jarFileName()).toString(),
                         "hello")
                 .execute();
-
     }
 }

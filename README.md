@@ -37,4 +37,3 @@ Be sure to have the GraalVM `native-image` utility in your path, or set its loca
 The options documentation can be found at:
 
 * https://www.graalvm.org/22.0/reference-manual/native-image/Options/
-
