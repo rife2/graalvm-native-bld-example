@@ -1,6 +1,7 @@
 # [GraalVM](https://www.graalvm.org/) Native Executable Example for [b<span style="color:orange">l</span>d](https://rife2.com/bld)
 
-Be sure to have the GraalVM `native-image` utility in your path, or set its location in the build file.
+Be sure to have the GraalVM `native-image` utility in your path, or set its location in the
+[build file](https://github.com/rife2/graalvm-native-bld-example/tree/main/src/bld/java/com/example).
 
 ## Compile the application
 
