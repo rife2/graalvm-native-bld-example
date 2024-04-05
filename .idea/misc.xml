@@ -3,6 +3,8 @@
   <component name="EntryPointsManager">
     <pattern value="com.example.GraalNativeBuild" />
     <pattern value="com.example.GraalNativeBuild" method="nativeExec" />
+    <pattern value="com.example.GraalNativeBuild" method="nativeClass" />
+    <pattern value="com.example.GraalNativeBuild" method="nativeJar" />
   </component>
   <component name="PDMPlugin">
     <option name="skipTestSources" value="false" />

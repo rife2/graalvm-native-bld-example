@@ -4,7 +4,7 @@ import rife.bld.BuildCommand;
 import rife.bld.Project;
 import rife.bld.extension.ExecOperation;
 
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.List;
 import java.util.jar.Attributes;
 
@@ -44,8 +44,22 @@ public class GraalNativeBuild extends Project {
         new GraalNativeBuild().start(args);
     }
 
-    @BuildCommand(value = "native-exec", summary = "Builds a native executable")
-    public void nativeExec() throws Exception {
+    @BuildCommand(value = "native-class", summary = "Builds a native executable")
+    public void nativeClass() throws Exception {
+        new ExecOperation()
+                .fromProject(this)
+                .timeout(120)
+                .workDir(buildMainDirectory().getAbsolutePath())
+                // The native image options documentation can be found at:
+                // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
+                .command("native-image", // use its absolute path if not found
+                        mainClass(),
+                        new File(workDirectory(), "hello").getAbsolutePath())
+                .execute();
+    }
+
+    @BuildCommand(value = "native-jar", summary = "Builds a native executable from the JAR")
+    public void nativeJar() throws Exception {
         new ExecOperation()
                 .fromProject(this)
                 .timeout(120)
@@ -53,7 +67,7 @@ public class GraalNativeBuild extends Project {
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
                 .command("native-image", // use its absolute path if not found
                         "-jar",
-                        Paths.get(buildDistDirectory().getAbsolutePath(), jarFileName()).toString(),
+                        new File(buildDistDirectory(), jarFileName()).toString(),
                         "hello")
                 .execute();
     }

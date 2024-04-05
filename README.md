@@ -8,22 +8,22 @@ Be sure to have the GraalVM `native-image` utility in your path, or set its loca
 ```console
 ./bld compile
 ```
-## Create a Java archive
+## Create the Java archive
 
 ```console
 ./bld jar
 ```
 
-## Create the native application
+## Create the native application from the Java archive
 
 ```console
-./bld native-exec
+./bld native-jar
 ```
 
-## Combine the commands
+## Create the native application from the main class
 
 ```console
-./bld compile jar native-exec
+./bld compile native-class
 ```
 
 ## Launch the application
