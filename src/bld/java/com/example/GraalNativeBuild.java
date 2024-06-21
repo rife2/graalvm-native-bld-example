@@ -15,9 +15,7 @@ import static rife.bld.dependencies.Scope.test;
 /**
  * Gradle Native Example Build.
  *
- * <ul style="list-style-type:none">
- *     <li>{@code ./bld compile jar native-exec}</li>
- * </ul>
+ * <pre>{@code ./bld compile jar native-exec }</pre>
  */
 public class GraalNativeBuild extends Project {
     public GraalNativeBuild() {
