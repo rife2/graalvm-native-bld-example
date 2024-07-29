@@ -31,8 +31,8 @@ public class GraalNativeBuild extends Project {
 
         repositories = List.of(MAVEN_CENTRAL, RIFE2_RELEASES);
         scope(test)
-                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 10, 2)))
-                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 10, 2)));
+                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 10, 3)))
+                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 10, 3)));
 
         // Add the main class to the manifest
         jarOperation().manifestAttribute(Attributes.Name.MAIN_CLASS, mainClass());
@@ -47,7 +47,7 @@ public class GraalNativeBuild extends Project {
         new ExecOperation()
                 .fromProject(this)
                 .timeout(120)
-                .workDir(buildMainDirectory().getAbsolutePath())
+                .workDir(buildMainDirectory())
                 // The native image options documentation can be found at:
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
                 .command("native-image", // use its absolute path if not found
