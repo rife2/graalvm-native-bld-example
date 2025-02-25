@@ -31,8 +31,8 @@ public class GraalNativeBuild extends Project {
 
         repositories = List.of(MAVEN_CENTRAL, RIFE2_RELEASES);
         scope(test)
-                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 11, 4)))
-                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 11, 4)));
+                .include(dependency("org.junit.jupiter", "junit-jupiter", version(5, 12, 0)))
+                .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1, 12, 0)));
 
         // Add the main class to the manifest
         jarOperation().manifestAttribute(Attributes.Name.MAIN_CLASS, mainClass());
