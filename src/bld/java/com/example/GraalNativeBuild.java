@@ -24,10 +24,10 @@ public class GraalNativeBuild extends Project {
     final static List<String> native_image;
 
     static {
-        if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            native_image = List.of("cmd", "/c", "native-image");
+        if (ExecOperation.isWindows()) {
+            native_image = List.of("cmd", "/c", "native-image"); // Windows
         } else {
-            native_image = List.of("native-image");
+            native_image = List.of("native-image"); // MacOS & Linux
         }
     }
 
