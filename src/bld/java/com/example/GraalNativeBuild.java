@@ -5,6 +5,8 @@ import rife.bld.Project;
 import rife.bld.extension.ExecOperation;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.jar.Attributes;
 
@@ -15,7 +17,7 @@ import static rife.bld.dependencies.Scope.test;
 /**
  * Gradle Native Example Build.
  *
- * <pre>{@code ./bld compile jar native-exec }</pre>
+ * <pre>{@code ./bld compile jar native-class }</pre>
  */
 public class GraalNativeBuild extends Project {
     // Command(s) used to invoke the `native-image` tool
@@ -53,6 +55,12 @@ public class GraalNativeBuild extends Project {
         new GraalNativeBuild().start(args);
     }
 
+    @Override
+    public void clean() throws Exception {
+        Files.deleteIfExists(Path.of("hello")); // delete binary if exists
+        super.clean();
+    }
+
     @BuildCommand(value = "native-class", summary = "Builds a native executable")
     public void nativeClass() throws Exception {
         new ExecOperation()
@@ -62,7 +70,8 @@ public class GraalNativeBuild extends Project {
                 // The native image options documentation can be found at:
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
                 .command(native_image)
-                .command(mainClass(), new File(workDirectory(), "hello").getAbsolutePath())
+                .command(mainClass(),
+                        new File(workDirectory(), "hello").getAbsolutePath())
                 .execute();
     }
 
