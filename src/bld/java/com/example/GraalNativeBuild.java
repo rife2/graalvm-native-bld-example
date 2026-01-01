@@ -18,6 +18,17 @@ import static rife.bld.dependencies.Scope.test;
  * <pre>{@code ./bld compile jar native-exec }</pre>
  */
 public class GraalNativeBuild extends Project {
+    // Command(s) used to invoke the `native-image` tool
+    final static List<String> native_image;
+
+    static {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            native_image = List.of("cmd", "/c", "native-image");
+        } else {
+            native_image = List.of("native-image");
+        }
+    }
+
     public GraalNativeBuild() {
         pkg = "com.example";
         name = "GraalNative";
@@ -50,9 +61,8 @@ public class GraalNativeBuild extends Project {
                 .workDir(buildMainDirectory())
                 // The native image options documentation can be found at:
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
-                .command("native-image", // use its absolute path if not found
-                        mainClass(),
-                        new File(workDirectory(), "hello").getAbsolutePath())
+                .command(native_image)
+                .command(mainClass(), new File(workDirectory(), "hello").getAbsolutePath())
                 .execute();
     }
 
@@ -63,8 +73,8 @@ public class GraalNativeBuild extends Project {
                 .timeout(120)
                 // The native image options documentation can be found at:
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
-                .command("native-image", // use its absolute path if not found
-                        "-jar",
+                .command(native_image)
+                .command("-jar",
                         new File(buildDistDirectory(), jarFileName()).toString(),
                         "hello")
                 .execute();
