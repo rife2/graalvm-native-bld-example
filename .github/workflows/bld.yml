@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout source repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -23,8 +23,15 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           native-image-job-reports: 'true'
 
-      - name: Download dependencies
-        run: ./bld download
+      - name: Cache bld dependencies
+        id: cache-bld
+        uses: actions/cache@v6
+        with:
+          path: lib
+          key: ${{ runner.os }}-bld-java${{ matrix.java-version }}-lib
+
+      - name: Compile source
+        run: ./bld --auto-download-purge clean compile
 
       - name: Build JAR
         run: ./bld jar
@@ -33,7 +40,7 @@ jobs:
         run: ./bld native-jar
 
       - name: Create native application
-        run: ./bld compile native-class
+        run: ./bld clean compile native-class
 
       - name: Launch the application
         run: ./hello
