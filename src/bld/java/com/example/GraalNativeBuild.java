@@ -10,26 +10,15 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.jar.Attributes;
 
-import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
-import static rife.bld.dependencies.Repository.RIFE2_RELEASES;
+import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.test;
 
 /**
  * Gradle Native Example Build.
  *
- * <pre>{@code ./bld compile jar native-class }</pre>
+ * <pre>{@code ./bld clean compile jar native-class }</pre>
  */
 public class GraalNativeBuild extends Project {
-    // Command(s) used to invoke the `native-image` tool
-    final static List<String> native_image;
-
-    static {
-        if (ExecOperation.isWindows()) {
-            native_image = List.of("cmd", "/c", "native-image"); // Windows
-        } else {
-            native_image = List.of("native-image"); // MacOS & Linux
-        }
-    }
 
     public GraalNativeBuild() {
         pkg = "com.example";
@@ -42,9 +31,9 @@ public class GraalNativeBuild extends Project {
         downloadSources = true;
         autoDownloadPurge = true;
 
-        repositories = List.of(MAVEN_CENTRAL, RIFE2_RELEASES);
+        repositories = List.of(MAVEN_CENTRAL, RIFE2_RELEASES, RIFE2_SNAPSHOTS);
 
-        var junit = version(6, 0, 3);
+        var junit = version(6, 1, 3);
         scope(test)
                 .include(dependency("org.junit.jupiter", "junit-jupiter", junit))
                 .include(dependency("org.junit.platform", "junit-platform-console-standalone", junit));
@@ -53,14 +42,14 @@ public class GraalNativeBuild extends Project {
         jarOperation().manifestAttribute(Attributes.Name.MAIN_CLASS, mainClass());
     }
 
-    public static void main(String[] args) {
-        new GraalNativeBuild().start(args);
-    }
-
     @Override
     public void clean() throws Exception {
         Files.deleteIfExists(Path.of("hello")); // delete binary if exists
         super.clean();
+    }
+
+    public static void main(String[] args) {
+        new GraalNativeBuild().start(args);
     }
 
     @BuildCommand(value = "native-class", summary = "Builds a native executable")
@@ -71,8 +60,8 @@ public class GraalNativeBuild extends Project {
                 .workDir(buildMainDirectory())
                 // The native image options documentation can be found at:
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
-                .command(native_image)
-                .command(mainClass(),
+                .command("native-image",
+                        mainClass(),
                         new File(workDirectory(), "hello").getAbsolutePath())
                 .execute();
     }
@@ -84,10 +73,9 @@ public class GraalNativeBuild extends Project {
                 .timeout(120)
                 // The native image options documentation can be found at:
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
-                .command(native_image)
-                .command("-jar",
-                        new File(buildDistDirectory(), jarFileName()).toString(),
-                        "hello")
+                .command("native-image",
+                        "-jar",
+                        new File(buildDistDirectory(), jarFileName()).toString(), "hello")
                 .execute();
     }
 }
