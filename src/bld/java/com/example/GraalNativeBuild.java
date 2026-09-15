@@ -59,7 +59,7 @@ public class GraalNativeBuild extends Project {
                 .fromProject(this)
                 .timeout(120)
                 .workDir(buildMainDirectory())
-                .command("native-image",
+                .onUnix("native-image",
                         mainClass(),
                         new File(workDirectory(), "hello").getAbsolutePath())
                 .onWindows("native-image.cmd",
@@ -73,7 +73,7 @@ public class GraalNativeBuild extends Project {
         new ExecOperation()
                 .fromProject(this)
                 .timeout(120)
-                .command("native-image",
+                .onUnix("native-image",
                         "-jar",
                         new File(buildDistDirectory(), jarFileName()).toString(), "hello")
                 .onWindows("native-image.cmd",
