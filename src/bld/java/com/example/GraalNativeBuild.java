@@ -58,9 +58,8 @@ public class GraalNativeBuild extends Project {
                 .fromProject(this)
                 .timeout(120)
                 .workDir(buildMainDirectory())
-                // The native image options documentation can be found at:
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
-                .command("native-image",
+                .command(nativeImageExecutable(),
                         mainClass(),
                         new File(workDirectory(), "hello").getAbsolutePath())
                 .execute();
@@ -71,11 +70,21 @@ public class GraalNativeBuild extends Project {
         new ExecOperation()
                 .fromProject(this)
                 .timeout(120)
-                // The native image options documentation can be found at:
                 // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
-                .command("native-image",
+                .command(nativeImageExecutable(),
                         "-jar",
                         new File(buildDistDirectory(), jarFileName()).toString(), "hello")
                 .execute();
+    }
+
+    private String nativeImageExecutable() {
+        var javaHome = System.getenv("JAVA_HOME");
+        if (javaHome != null) {
+            var candidate = Path.of(javaHome, "bin", "native-image");
+            if (Files.exists(candidate)) {
+                return candidate.toString();
+            }
+        }
+        return "native-image";
     }
 }
