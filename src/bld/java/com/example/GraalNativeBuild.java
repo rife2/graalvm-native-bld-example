@@ -62,7 +62,7 @@ public class GraalNativeBuild extends Project {
                 .command("native-image",
                         mainClass(),
                         new File(workDirectory(), "hello").getAbsolutePath())
-                .onWindows().command("native-image.cmd",
+                .onWindows("native-image.cmd",
                         mainClass(),
                         new File(workDirectory(), "hello.exe").getAbsolutePath())
                 .execute();
@@ -76,7 +76,7 @@ public class GraalNativeBuild extends Project {
                 .command("native-image",
                         "-jar",
                         new File(buildDistDirectory(), jarFileName()).toString(), "hello")
-                .onWindows().command("native-image.cmd",
+                .onWindows("native-image.cmd",
                         "-jar",
                         new File(buildDistDirectory(), jarFileName()).toString(), "hello.exe")
                 .execute();
