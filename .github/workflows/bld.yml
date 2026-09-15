@@ -43,5 +43,11 @@ jobs:
       - name: Create native application
         run: ./bld clean compile native-class
 
-      - name: Launch the application
+      - name: Launch the application (Unix)
+        if: runner.os != 'Windows'
         run: ./hello
+
+      - name: Launch the application (Windows)
+        if: runner.os == 'Windows'
+        run: .\hello.exe
+
