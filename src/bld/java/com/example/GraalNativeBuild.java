@@ -44,7 +44,8 @@ public class GraalNativeBuild extends Project {
 
     @Override
     public void clean() throws Exception {
-        Files.deleteIfExists(Path.of("hello")); // delete binary if exists
+        Files.deleteIfExists(Path.of("hello"));
+        Files.deleteIfExists(Path.of("hello.exe"));
         super.clean();
     }
 
@@ -58,11 +59,12 @@ public class GraalNativeBuild extends Project {
                 .fromProject(this)
                 .timeout(120)
                 .workDir(buildMainDirectory())
-                // The native image options documentation can be found at:
-                // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
                 .command("native-image",
                         mainClass(),
                         new File(workDirectory(), "hello").getAbsolutePath())
+                .onWindows().command("native-image.cmd",
+                        mainClass(),
+                        new File(workDirectory(), "hello.exe").getAbsolutePath())
                 .execute();
     }
 
@@ -71,11 +73,12 @@ public class GraalNativeBuild extends Project {
         new ExecOperation()
                 .fromProject(this)
                 .timeout(120)
-                // The native image options documentation can be found at:
-                // https://www.graalvm.org/22.0/reference-manual/native-image/Options/
                 .command("native-image",
                         "-jar",
                         new File(buildDistDirectory(), jarFileName()).toString(), "hello")
+                .onWindows().command("native-image.cmd",
+                        "-jar",
+                        new File(buildDistDirectory(), jarFileName()).toString(), "hello.exe")
                 .execute();
     }
 }
